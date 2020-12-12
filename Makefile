@@ -18,6 +18,7 @@ config:
 	$(pip) install wheel
 	$(pip) install tox
 	$(pip) install setuptools-scm
+        $(PIP) install git+https://github.com/psf/black
 
 
 ## test: Run test case.
