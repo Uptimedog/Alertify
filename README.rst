@@ -7,6 +7,11 @@
 
 |
 
+.. image:: https://raw.githubusercontent.com/Uptimedog/Alertify/main/chart/chart.png
+   :width: 100%
+
+|
+
 ========
 Alertify
 ========
