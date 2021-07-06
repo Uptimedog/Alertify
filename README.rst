@@ -17,4 +17,4 @@ Alertify
 Note
 ====
 
-This project is created and maintained for Uptimedog. see https://github.com/clivern
+This project is created and maintained for Uptimedog. see https://github.com/Uptimedog
