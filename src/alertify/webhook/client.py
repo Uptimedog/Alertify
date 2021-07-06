@@ -22,7 +22,6 @@
 
 import requests
 import logging
-import json
 from alertify.exception import ApiError
 
 
