@@ -26,7 +26,7 @@ from alertify.exception import ApiError
 
 
 class Client():
-    """Client Class"""
+    """Webhook Client Class"""
 
     def __init__(self):
         self._logging = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ class Client():
     def post(self, url, api_key, payload={}):
 
         headers = {
-            'Authorization': f'Bearer {api_key}',
+            'X-API-KEY': api_key,
         }
 
         try:
@@ -42,15 +42,15 @@ class Client():
         except Exception as e:
             raise ApiError("Failed to call webhook: {}".format(str(e)))
 
-        if response.status_code // 100 == 2:
+        if response.status_code // 100 != 2:
             raise ApiError("Webhook respond with error status code {}".format(response.status_code))
 
-        return True
+        return response.content.decode("utf-8")
 
     def put(self, url, api_key, payload={}):
 
         headers = {
-            'Authorization': f'Bearer {api_key}',
+            'X-API-KEY': api_key,
         }
 
         try:
@@ -58,7 +58,7 @@ class Client():
         except Exception as e:
             raise ApiError("Failed to call webhook: {}".format(str(e)))
 
-        if response.status_code // 100 == 2:
+        if response.status_code // 100 != 2:
             raise ApiError("Webhook respond with error status code {}".format(response.status_code))
 
-        return True
+        return response.content.decode("utf-8")
