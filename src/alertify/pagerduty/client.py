@@ -26,67 +26,94 @@ import json
 from alertify.exception import ApiError
 
 
-class Client():
+class Client:
     """Pagerduty Client Class"""
 
     def __init__(self):
         self._logging = logging.getLogger(__name__)
 
-    def trigger_incident(self, routing_key, summary, source, severity, component, group, class_type, details={}):
+    def trigger_incident(
+        self,
+        routing_key,
+        summary,
+        source,
+        severity,
+        component,
+        group,
+        class_type,
+        details={},
+    ):
         """Trigger Incident"""
         data = {
-            'routing_key': routing_key,
-            'event_action': 'trigger',
-            'payload': {
-                'summary': summary,
-                'source': source,
-                'severity': severity,
-                'component': component,
-                'group': group,
-                'class': class_type,
-                'custom_details': details
-            }
+            "routing_key": routing_key,
+            "event_action": "trigger",
+            "payload": {
+                "summary": summary,
+                "source": source,
+                "severity": severity,
+                "component": component,
+                "group": group,
+                "class": class_type,
+                "custom_details": details,
+            },
         }
 
         try:
             response = requests.post(
-                'https://events.pagerduty.com/v2/enqueue',
-                json=data
+                "https://events.pagerduty.com/v2/enqueue", json=data
             )
         except Exception as e:
             raise ApiError("Failed to create PagerDuty incident: {}".format(str(e)))
 
         if response.status_code // 100 != 2:
-            raise ApiError("PagerDuty respond with invalid status code {}".format(response.status_code))
+            raise ApiError(
+                "PagerDuty respond with invalid status code {}".format(
+                    response.status_code
+                )
+            )
 
         return json.loads(response.content.decode("utf-8"))
 
-    def resolve_incident(self, routing_key, dedup_key, summary, source, severity, component, group, class_type, details={}):
+    def resolve_incident(
+        self,
+        routing_key,
+        dedup_key,
+        summary,
+        source,
+        severity,
+        component,
+        group,
+        class_type,
+        details={},
+    ):
         """Resolve Incident"""
         data = {
-            'routing_key': routing_key,
-            'event_action': 'resolve',
-            'dedup_key': dedup_key,
-            'payload': {
-                'summary': summary,
-                'source': source,
-                'severity': severity,
-                'component': component,
-                'group': group,
-                'class': class_type,
-                'custom_details': details
-            }
+            "routing_key": routing_key,
+            "event_action": "resolve",
+            "dedup_key": dedup_key,
+            "payload": {
+                "summary": summary,
+                "source": source,
+                "severity": severity,
+                "component": component,
+                "group": group,
+                "class": class_type,
+                "custom_details": details,
+            },
         }
 
         try:
             response = requests.post(
-                'https://events.pagerduty.com/v2/enqueue',
-                json=data
+                "https://events.pagerduty.com/v2/enqueue", json=data
             )
         except Exception as e:
             raise ApiError("Failed to create PagerDuty incident: {}".format(str(e)))
 
         if response.status_code // 100 != 2:
-            raise ApiError("PagerDuty respond with invalid status code {}".format(response.status_code))
+            raise ApiError(
+                "PagerDuty respond with invalid status code {}".format(
+                    response.status_code
+                )
+            )
 
         return json.loads(response.content.decode("utf-8"))

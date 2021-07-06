@@ -26,83 +26,100 @@ import json
 from alertify.exception import ApiError
 
 
-class Client():
+class Client:
     """Opsgenie Client Class"""
 
     def __init__(self):
         self._logging = logging.getLogger(__name__)
 
-    def trigger_incident(self, api_key, message, description, priority, tags=[], details={}):
+    def trigger_incident(
+        self, api_key, message, description, priority, tags=[], details={}
+    ):
         """Trigger Incident"""
         data = {
             "message": message,
             "description": description,
             "priority": priority,
             "tags": tags,
-            "details": details
+            "details": details,
         }
 
         headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'GenieKey ' + api_key
+            "Content-Type": "application/json",
+            "Authorization": "GenieKey " + api_key,
         }
 
         try:
             response = requests.post(
-                'https://api.eu.opsgenie.com/v2/alerts',
-                headers=headers,
-                json=data
+                "https://api.eu.opsgenie.com/v2/alerts", headers=headers, json=data
             )
         except Exception as e:
             raise ApiError("Failed to create opsgenie incident: {}".format(str(e)))
 
         if response.status_code // 100 != 2:
-            raise ApiError("Opsgenie respond with invalid status code {}".format(response.status_code))
+            raise ApiError(
+                "Opsgenie respond with invalid status code {}".format(
+                    response.status_code
+                )
+            )
 
         return json.loads(response.content.decode("utf-8"))
 
     def fetch_request(self, api_key, request_id):
         """Fetch Alert With Request ID"""
         headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'GenieKey ' + api_key
+            "Content-Type": "application/json",
+            "Authorization": "GenieKey " + api_key,
         }
 
         try:
             response = requests.get(
                 "https://api.opsgenie.com/v2/alerts/requests/{}".format(request_id),
-                headers=headers
+                headers=headers,
             )
         except Exception as e:
             raise ApiError("Failed to fetch opsgenie request: {}".format(str(e)))
 
         if response.status_code // 100 != 2:
-            raise ApiError("Opsgenie respond with invalid status code {}".format(response.status_code))
+            raise ApiError(
+                "Opsgenie respond with invalid status code {}".format(
+                    response.status_code
+                )
+            )
 
         return json.loads(response.content.decode("utf-8"))
 
-    def resolve_incident(self, api_key, incident_id, source="Uptimedog", note="Action executed via Alert API"):
+    def resolve_incident(
+        self,
+        api_key,
+        incident_id,
+        source="Uptimedog",
+        note="Action executed via Alert API",
+    ):
         """Resolve Incident"""
-        data = {
-            "source": source,
-            "note": note
-        }
+        data = {"source": source, "note": note}
 
         headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'GenieKey ' + api_key
+            "Content-Type": "application/json",
+            "Authorization": "GenieKey " + api_key,
         }
 
         try:
             response = requests.post(
-                "https://api.opsgenie.com/v2/alerts/{}/close?identifierType=id".format(incident_id),
+                "https://api.opsgenie.com/v2/alerts/{}/close?identifierType=id".format(
+                    incident_id
+                ),
                 data=json.dumps(data),
-                headers=headers
+                headers=headers,
             )
         except Exception as e:
             raise ApiError("Failed to close opsgenie incident: {}".format(str(e)))
 
         if response.status_code // 100 != 2:
-            raise ApiError("Opsgenie respond with invalid status code {}".format(response.status_code))
+            raise ApiError(
+                "Opsgenie respond with invalid status code {}".format(
+                    response.status_code
+                )
+            )
 
         return json.loads(response.content.decode("utf-8"))

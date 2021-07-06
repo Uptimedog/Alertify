@@ -25,16 +25,15 @@ import logging
 from alertify.exception import ApiError
 
 
-class Client():
+class Client:
     """Webhook Client Class"""
 
     def __init__(self):
         self._logging = logging.getLogger(__name__)
 
     def post(self, url, api_key, payload={}):
-
         headers = {
-            'X-API-KEY': api_key,
+            "X-API-KEY": api_key,
         }
 
         try:
@@ -43,14 +42,15 @@ class Client():
             raise ApiError("Failed to call webhook: {}".format(str(e)))
 
         if response.status_code // 100 != 2:
-            raise ApiError("Webhook respond with error status code {}".format(response.status_code))
+            raise ApiError(
+                "Webhook respond with error status code {}".format(response.status_code)
+            )
 
         return response.content.decode("utf-8")
 
     def put(self, url, api_key, payload={}):
-
         headers = {
-            'X-API-KEY': api_key,
+            "X-API-KEY": api_key,
         }
 
         try:
@@ -59,6 +59,8 @@ class Client():
             raise ApiError("Failed to call webhook: {}".format(str(e)))
 
         if response.status_code // 100 != 2:
-            raise ApiError("Webhook respond with error status code {}".format(response.status_code))
+            raise ApiError(
+                "Webhook respond with error status code {}".format(response.status_code)
+            )
 
         return response.content.decode("utf-8")

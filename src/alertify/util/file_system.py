@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 
-class FileSystem():
+class FileSystem:
     """FileSystem Class"""
 
     @staticmethod

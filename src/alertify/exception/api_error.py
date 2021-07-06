@@ -23,4 +23,5 @@
 
 class ApiError(Exception):
     """API Error"""
+
     pass

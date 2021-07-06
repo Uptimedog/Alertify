@@ -25,74 +25,59 @@ import logging
 from alertify.exception import ApiError
 
 
-class Client():
+class Client:
     """Client Class"""
 
     def __init__(self):
         self._logging = logging.getLogger(__name__)
 
     def send_sms(self, sendgrid_api_key, from_phone, to_phone, message):
-
         payload = {
-            'api_user': sendgrid_api_key,
-            'api_key': sendgrid_api_key,
-            'from': from_phone,
-            'to': to_phone,
-            'text': message
+            "api_user": sendgrid_api_key,
+            "api_key": sendgrid_api_key,
+            "from": from_phone,
+            "to": to_phone,
+            "text": message,
         }
 
         try:
-            response = requests.post(
-                'https://api.sendgrid.com/v1/sms/send',
-                data=data
-            )
+            response = requests.post("https://api.sendgrid.com/v1/sms/send", data=data)
         except Exception as e:
             raise ApiError("Failed to send SMS: {}".format(str(e)))
 
         if response.status_code // 100 != 2:
-            raise ApiError("Sendgrid respond with invalid status code {}".format(response.status_code))
+            raise ApiError(
+                "Sendgrid respond with invalid status code {}".format(
+                    response.status_code
+                )
+            )
 
         return True
 
     def send_text_email(self, sendgrid_api_key, from_email, to_email, subject, body):
-
         headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + sendgrid_api_key
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + sendgrid_api_key,
         }
 
         payload = {
-            'personalizations': [
-                {
-                    'to': [
-                        {
-                            'email': to_email
-                        }
-                    ],
-                    'subject': subject
-                }
-            ],
-            'from': {
-                'email': from_email
-            },
-            'content': [
-                {
-                    'type': 'text/plain',
-                    'value': body
-                }
-            ]
+            "personalizations": [{"to": [{"email": to_email}], "subject": subject}],
+            "from": {"email": from_email},
+            "content": [{"type": "text/plain", "value": body}],
         }
 
         try:
             response = requests.post(
-                'https://api.sendgrid.com/v3/mail/send',
-                headers=headers,
-                json=payload
+                "https://api.sendgrid.com/v3/mail/send", headers=headers, json=payload
             )
         except Exception as e:
             raise ApiError("Failed to send Email: {}".format(str(e)))
 
         if response.status_code // 100 != 2:
-            raise ApiError("Sendgrid respond with invalid status code {}".format(response.status_code))
+            raise ApiError(
+                "Sendgrid respond with invalid status code {}".format(
+                    response.status_code
+                )
+            )
 
         return True

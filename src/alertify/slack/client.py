@@ -23,7 +23,7 @@
 import logging
 
 
-class Client():
+class Client:
     """Client Class"""
 
     def __init__(self):
