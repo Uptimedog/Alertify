@@ -27,13 +27,13 @@ from alertify.exception import ApiError
 
 
 class Client():
-    """Client Class"""
+    """Pagerduty Client Class"""
 
     def __init__(self):
         self._logging = logging.getLogger(__name__)
 
     def trigger_incident(self, routing_key, summary, source, severity, component, group, class_type, details={}):
-
+        """Trigger Incident"""
         data = {
             'routing_key': routing_key,
             'event_action': 'trigger',
@@ -62,7 +62,7 @@ class Client():
         return json.loads(response.content.decode("utf-8"))
 
     def resolve_incident(self, routing_key, dedup_key, summary, source, severity, component, group, class_type, details={}):
-
+        """Resolve Incident"""
         data = {
             'routing_key': routing_key,
             'event_action': 'resolve',

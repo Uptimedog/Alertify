@@ -2,6 +2,11 @@
 Changelog
 =========
 
+Version 0.5.0
+=============
+
+- Opsgenie Integration.
+
 Version 0.4.0
 =============
 
